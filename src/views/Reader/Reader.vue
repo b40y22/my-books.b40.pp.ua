@@ -1,9 +1,13 @@
 <template>
-    <router-view></router-view>
+
 </template>
 
 <script>
 export default {
-  name: 'App',
+    name: "Index"
 }
 </script>
+
+<style scoped>
+
+</style>
