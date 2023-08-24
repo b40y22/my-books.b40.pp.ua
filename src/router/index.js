@@ -16,13 +16,13 @@ const routes = [
     {path: '/login', name: 'Login', component: Login, meta: {middleware: [auth, log]}},
 
     // General
-    {path: '/', name: 'Home', component: Home, meta: {middleware: [auth, log]}},
+    {path: '/home', name: 'Home', component: Home, meta: {middleware: [auth, log]}},
 
     // Import
     {path: '/import/loveread', name: 'Loveread', component: Loveread, meta: {middleware: [auth, log]}},
 
     // Books
-    {path: '/books', name: 'BookList', component: BookList, meta: {middleware: [auth, log]}},
+    {path: '/', name: 'BookList', component: BookList, meta: {middleware: [auth, log]}},
 
     // 404
     {path: '/:catchAll(.*)', component: Error404}

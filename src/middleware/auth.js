@@ -1,7 +1,6 @@
 import cookies from "vue-cookies";
-import Home from "@/views/Home.vue";
 
-export default function auth({ to, from, next }) {
+export default function auth({ to, next }) {
     if (cookies.get('auth_token')) {
         // cookie auth_token EXIST
         if (to.name === 'Login' || to.name === 'Registration') {
