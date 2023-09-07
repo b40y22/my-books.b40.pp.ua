@@ -22,7 +22,7 @@ const routes = [
     {path: '/import/loveread', name: 'Loveread', component: Loveread, meta: {middleware: [auth, log]}},
 
     // Books
-    {path: '/', name: 'BookList', component: BookList, meta: {middleware: [auth, log]}},
+    {path: '/', name: 'Root', component: BookList, meta: {middleware: [auth, log]}},
 
     // 404
     {path: '/:catchAll(.*)', component: Error404}

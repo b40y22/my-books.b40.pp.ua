@@ -1,103 +1,110 @@
 <template>
-    <div id="menu-box">
-        <div class="menu-logo" title="Головна">
-            <img class="menu-logo-image" src="/icons/logo.png?v=0.30" alt="Лого">
-        </div>
-        <div class="menu-navbar">
-            <ul class="menu-navbar-list">
-                <li>
-                    <a href="#">Головна</a>
-                </li>
-                <li>
-                    <a href="#">Автори</a>
-                </li>
-                <li>
-                    <a href="#">Додати</a>
-                </li>
-                <li>
-                    <a href="#">Черга</a>
-                </li>
-                <li>
-                    <a href="#">Новинки</a>
-                </li>
-            </ul>
-        </div>
-        <div class="menu-user">
-            <div title="Повідомлення">
-                <span id="message-envelope" class="fa fa-envelope-o"></span>
+    <header class="p-3 mb-3 border-bottom">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none">
+                    <img src="/icons/logo.png" alt="" style="height: 40px; margin-right: 50px; border: 1px solid #dee2e6">
+                </a>
+
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0" id="menu-box">
+                    <li><router-link :to="{name: 'Root'}" class="nav-link px-2 link-body-emphasis">Головна</router-link></li>
+                    <li><router-link :to="{name: 'Root'}" class="nav-link px-2 link-body-emphasis">Автори</router-link></li>
+                    <li><router-link :to="{name: 'Root'}" class="nav-link px-2 link-body-emphasis">Черга</router-link></li>
+                    <li class="nav-item dropdown" ref="addDropdown" @click="toggleDropdownState('addDropdown')">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Додати
+                        </a>
+                        <ul class="dropdown-menu" :class="{show: this.checkDropdownInActive('addDropdown')}">
+                            <li><a class="dropdown-item" href="#">Книгу</a></li>
+                            <li><a class="dropdown-item" href="#">Автора</a></li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+                    <input type="search" class="form-control" placeholder="Пошук" aria-label="Search" title="Назва книжки, або автор">
+                </form>
+
+                <div class="dropdown nav-item text-end" ref="userDropdown" @click="toggleDropdownState('userDropdown')">
+                    <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle show" data-bs-toggle="dropdown" aria-expanded="true">
+                        <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
+                    </a>
+                    <ul class="dropdown-menu text-small" :class="{show: this.checkDropdownInActive('userDropdown')}">
+                        <li><a class="dropdown-item" href="#">New project...</a></li>
+                        <li><a class="dropdown-item" href="#">Settings</a></li>
+                        <li><a class="dropdown-item" href="#">Profile</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Sign out</a></li>
+                    </ul>
+                </div>
             </div>
-            <div title="Користувач">
-                <img class="menu-user-image" src="/images/users/profile.png?v=0.1" alt="Користувач">
-            </div>
         </div>
-    </div>
+    </header>
 </template>
 
 <script>
+
 /* eslint-disable vue/multi-word-component-names */
 export default {
     name: "Menu",
+    beforeUnmount() {
+        document.removeEventListener('click', this.handleDocumentClick);
+    },
     data() {
         return {
-            showDropdown: false
-        };
-    }
+            dropdownActive: []
+        }
+    },
+    computed: {
+
+    },
+    methods: {
+        checkDropdownInActive(dropdownTitle) {
+            return this.dropdownActive.includes(dropdownTitle);
+        },
+        toggleDropdownState(dropdownTitle) {
+            if (this.checkDropdownInActive(dropdownTitle)) {
+                let index = this.dropdownActive.indexOf(dropdownTitle);
+                if (index !== -1) {
+                    this.dropdownActive.splice(index, 1);
+                }
+            } else {
+                this.dropdownActive.push(dropdownTitle)
+            }
+        },
+        handleDocumentClick(event) {
+            let target = false;
+            Object.keys(this.$refs).forEach((ref) => {
+                if (this.$refs[ref].contains(event.target)) {
+                    target = true;
+                }
+            });
+
+            if (!target) {
+                this.dropdownActive = [];
+            }
+        }
+    },
+    mounted() {
+        document.addEventListener('click', this.handleDocumentClick);
+    },
 }
 </script>
 
 <style scoped>
-    #menu-box {
-        background-color: #F9F9F9;
-        border-bottom: 1px solid #efeeee;
-        display: flex;
-        justify-content: space-between;
-        height: 50px;
-        padding: 0;
-        margin: 0;
-        width: 100%;
-    }
-    .menu-logo {
-        cursor: pointer;
-        height: 50px;
-        padding-left: 10px;
-    }
-    .menu-logo-image {
-        height: 50px;
-    }
-    .menu-user {
-        display: flex;
-        flex-direction: row;
-    }
-    #message-envelope {
-        color: #8b8b8b;
-        cursor: pointer;
-        font-size: 20px;
-        padding: 16px 26px 0 0;
-    }
-    #message-envelope:hover {
-        color: #232836;
-    }
-    .menu-user-image {
-        cursor: pointer;
-        height: 44px;
-        border-radius: 24px;
-        margin: 4px 10px;
-        width: 44px;
-    }
-
-    .menu-navbar-list {
-        display: flex;
-        list-style: none;
-    }
-    .menu-navbar-list li a {
-        color: #8b8b8b;
-        text-decoration: none;
-    }
-    .menu-navbar-list li a:hover {
-        color: #232836;
-    }
-    .menu-navbar-list li {
-        position: relative;
-        margin-right: 15px;
-    }
+a, a:link, a:visited, .link-body-emphasis {
+    color: #000000;
+    text-decoration: none;
+}
+a:hover {
+ color: rgba(33, 37, 41, 0.75)
+}
+*:focus {
+    outline: none;
+}
+.form-control:focus {
+    border-color: #c7c6c6;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
 </style>
