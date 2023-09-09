@@ -30,4 +30,9 @@ export default {
     importBook(params) {
         return axios.post('/import', params).catch(handleApiError);
     },
+
+    // Books
+    getBooks() {
+        return axios.get('/book/list?orderBy=id,desc').catch(handleApiError);
+    }
 };

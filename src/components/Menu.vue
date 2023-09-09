@@ -21,20 +21,19 @@
                     </li>
                 </ul>
 
-                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-                    <input type="search" class="form-control" placeholder="Пошук" aria-label="Search" title="Назва книжки, або автор">
-                </form>
+                <div class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+                    <input type="search" class="form-control" placeholder="Пошук" v-model="search" title="Назва книжки, або автор" @keyup.enter="runSearch">
+                </div>
 
                 <div class="dropdown nav-item text-end" ref="userDropdown" @click="toggleDropdownState('userDropdown')">
                     <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle show" data-bs-toggle="dropdown" aria-expanded="true">
-                        <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
+                        <img src="/images/users/profile.png" alt="mdo" width="36" height="36" class="rounded-circle">
                     </a>
                     <ul class="dropdown-menu text-small" :class="{show: this.checkDropdownInActive('userDropdown')}">
-                        <li><a class="dropdown-item" href="#">New project...</a></li>
-                        <li><a class="dropdown-item" href="#">Settings</a></li>
-                        <li><a class="dropdown-item" href="#">Profile</a></li>
+                        <li><a class="dropdown-item" href="#">Налаштування</a></li>
+                        <li><a class="dropdown-item" href="#">Профіль</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#">Sign out</a></li>
+                        <li><a class="dropdown-item" href="#" @click="logout">Вихід</a></li>
                     </ul>
                 </div>
             </div>
@@ -43,8 +42,8 @@
 </template>
 
 <script>
-
 /* eslint-disable vue/multi-word-component-names */
+
 export default {
     name: "Menu",
     beforeUnmount() {
@@ -52,7 +51,8 @@ export default {
     },
     data() {
         return {
-            dropdownActive: []
+            dropdownActive: [],
+            search: '',
         }
     },
     computed: {
@@ -83,6 +83,13 @@ export default {
             if (!target) {
                 this.dropdownActive = [];
             }
+        },
+        runSearch() {
+
+        },
+        logout() {
+            this.$cookies.remove('auth_token');
+            this.$router.push('/login');
         }
     },
     mounted() {
@@ -92,19 +99,23 @@ export default {
 </script>
 
 <style scoped>
-a, a:link, a:visited, .link-body-emphasis {
-    color: #000000;
-    text-decoration: none;
-}
-a:hover {
- color: rgba(33, 37, 41, 0.75)
-}
-*:focus {
-    outline: none;
-}
-.form-control:focus {
-    border-color: #c7c6c6;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-}
+    a, a:link, a:visited, .link-body-emphasis {
+        color: #000000;
+        text-decoration: none;
+    }
+    a:hover {
+     color: rgba(33, 37, 41, 0.75)
+    }
+    *:focus {
+        outline: none;
+    }
+    .form-control:focus {
+        border-color: #c7c6c6;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+    .dropdown-item:active {
+        background-color: #bbbdbb;
+    }
+
 </style>
