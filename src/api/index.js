@@ -34,5 +34,10 @@ export default {
     // Books
     getBooks() {
         return axios.get('/book/list?orderBy=id,desc').catch(handleApiError);
+    },
+
+    // User
+    getCurrentUser() {
+        return axios.get('/user').catch(handleApiError);
     }
 };

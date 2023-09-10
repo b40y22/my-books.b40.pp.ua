@@ -27,11 +27,11 @@
 
                 <div class="dropdown nav-item text-end" ref="userDropdown" @click="toggleDropdownState('userDropdown')">
                     <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle show" data-bs-toggle="dropdown" aria-expanded="true">
-                        <img src="/images/users/profile.png" alt="mdo" width="36" height="36" class="rounded-circle">
+                        <img :src="getProfileImage" alt="Photo" width="42" height="42" class="rounded-circle" :title="getProfileName">
                     </a>
                     <ul class="dropdown-menu text-small" :class="{show: this.checkDropdownInActive('userDropdown')}">
                         <li><a class="dropdown-item" href="#">Налаштування</a></li>
-                        <li><a class="dropdown-item" href="#">Профіль</a></li>
+                        <li><router-link :to="{name: 'Show'}" class="dropdown-item">Профіль</router-link></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="#" @click="logout">Вихід</a></li>
                     </ul>
@@ -43,6 +43,7 @@
 
 <script>
 /* eslint-disable vue/multi-word-component-names */
+import api from "@/api";
 
 export default {
     name: "Menu",
@@ -55,8 +56,24 @@ export default {
             search: '',
         }
     },
+    created() {
+        api.getCurrentUser().then((response) => {
+            this.$store.dispatch('setUser', response.data.data.user);
+        })
+    },
     computed: {
-
+        getProfileImage() {
+            if (this.$store.getters.getUser.image) {
+                return process.env.VUE_APP_BACKEND_URL + 'images/users/' + this.$store.getters.getUser.image;
+            }
+            return '';
+        },
+        getProfileName() {
+            if (this.$store.getters.getUser.name) {
+                return this.$store.getters.getUser.name;
+            }
+            return '';
+        }
     },
     methods: {
         checkDropdownInActive(dropdownTitle) {
@@ -117,5 +134,4 @@ export default {
     .dropdown-item:active {
         background-color: #bbbdbb;
     }
-
 </style>

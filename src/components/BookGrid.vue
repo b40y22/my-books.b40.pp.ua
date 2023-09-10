@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div class="card" v-for="(book, index) in this.books" :key="index">
+        <div class="card" v-for="(book, index) in this.$store.getters.getBooks" :key="index">
             <Card :book="book"></Card>
         </div>
     </div>
@@ -13,10 +13,7 @@ export default {
     name: "BookGrid",
     components: {
         Card
-    },
-    props: [
-        'books'
-    ]
+    }
 }
 </script>
 
