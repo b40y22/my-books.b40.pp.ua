@@ -37,6 +37,7 @@ import api from "@/api";
 import Notification from "@/components/Notifications.vue";
 
 const SHOW_MESSAGE_IN_SECONDS = 5;
+const HOME_URL = '/';
 
 export default {
     name: "Login",
@@ -62,7 +63,7 @@ export default {
                 })
                 .then(response => {
                     this.$cookies.set('auth_token', response.data.data.token, 60 * 60 * 24 * 7);
-                    this.$router.push('/import/loveread');
+                    this.$router.push(HOME_URL);
                 })
                 .catch(error => {
                     error.response.data.errors.forEach(message => {

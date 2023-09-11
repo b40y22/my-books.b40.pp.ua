@@ -39,5 +39,8 @@ export default {
     // User
     getCurrentUser() {
         return axios.get('/user').catch(handleApiError);
+    },
+    updateCurrentUser(params) {
+        return axios.post('/user', params).catch(handleApiError);
     }
 };

@@ -11,15 +11,15 @@
 
         <div class="form-group my-3">
             <label for="profile-name">Ім'я</label>
-            <input type="text" class="form-control" id="profile-name" v-model="this.$store.getters.getUser.name">
+            <input type="text" class="form-control" id="profile-name" v-model="this.$store.getters.getUser.name" @change="changeName">
         </div>
 
         <div class="form-group my-3">
             <label for="profile-email">Електронна пошта</label>
-            <input type="email" class="form-control" id="profile-email" v-model="this.$store.getters.getUser.email">
+            <input type="email" class="form-control" id="profile-email" v-model="this.$store.getters.getUser.email" @change="changeEmail">
         </div>
 
-        <button type="button" class="btn btn-primary mt-3">Зберегти</button>
+        <button type="button" class="btn btn-primary mt-3" @click="handle">Зберегти</button>
     </div>
 
 </template>
@@ -56,9 +56,20 @@ export default {
     data() {
         return {
             showIcon: false,
+            User: {
+                name: null,
+                email: null,
+                image: null
+            }
         };
     },
     methods: {
+        changeName() {
+            this.User.name = this.$store.getters.getUser.name
+        },
+        changeEmail() {
+            this.User.email = this.$store.getters.getUser.email
+        },
         openFileInput() {
             this.$refs.fileInput.click();
         },
@@ -69,11 +80,36 @@ export default {
             this.showIcon = false;
         },
         handleFileChange(event) {
-            const selectedFile = event.target.files[0];
-            if (selectedFile) {
-                // Тут ви можете виконати код для завантаження та відображення нового зображення
-            }
+            this.User.image = event.target.files[0];
         },
+        handle() {
+            const config = {
+                headers: {
+                    'content-type': 'multipart/form-data'
+                }
+            }
+
+            let data = new FormData();
+            data.append('id', this.$store.getters.getUser.id);
+
+            if (this.User.name) {
+                data.append('name', this.User.name);
+            }
+
+            if (this.User.email) {
+                data.append('email', this.User.email);
+            }
+
+            if (this.User.image) {
+                data.append('image', this.User.image);
+            }
+
+            api.updateCurrentUser(data, config).then(response => {
+                if (200 === response.status) {
+                    this.$store.dispatch('setUser', response.data.data.user)
+                }
+            });
+        }
     },
 }
 </script>
