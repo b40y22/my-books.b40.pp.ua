@@ -29,7 +29,7 @@ export default {
     created() {
         api.getBooks().then((response) => {
             if (response.data.data.books.items.length > 0) {
-                this.$store.setBooks(response.data.data.books.items);
+                this.$store.commit('setBooks', response.data.data.books.items);
             }
         })
     },

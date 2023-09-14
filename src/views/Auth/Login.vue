@@ -1,9 +1,9 @@
 <template>
     <div>
-        <div class="errors">
-            <notification :messagesArray="this.errors"></notification>
+        <div class="messages">
+            <Notification></Notification>
         </div>
-        <section class="container forms">
+        <section class="container-central forms">
             <div class="form login">
                 <div class="form-content">
                     <header>Вхід</header>
@@ -36,7 +36,6 @@
 import api from "@/api";
 import Notification from "@/components/Notifications.vue";
 
-const SHOW_MESSAGE_IN_SECONDS = 5;
 const HOME_URL = '/';
 
 export default {
@@ -47,7 +46,6 @@ export default {
     data: function () {
         return {
             email: '',
-            errors: [],
             password: '',
         }
     },
@@ -56,7 +54,7 @@ export default {
             this.validateEmailField();
             this.validatePasswordField();
 
-            if (this.errors.length < 1) {
+            if (this.$store.getters.getMessages.length < 1) {
                 api.loginSend({
                     "email": this.email,
                     "password": this.password,
@@ -67,37 +65,31 @@ export default {
                 })
                 .catch(error => {
                     error.response.data.errors.forEach(message => {
-                        let newMessage = {
+                        this.$store.commit('addMessages', {
+                            'title': 'Помилка',
                             'type': 'error',
                             'text': message,
-                            'remainingTime': SHOW_MESSAGE_IN_SECONDS,
-                            'pin': false
-                        };
-                        this.errors.push(newMessage);
+                        });
                     })
                 });
             }
         },
         validateEmailField() {
             if (!this.email) {
-                let newMessage = {
+                this.$store.commit('addMessages', {
+                    'title': 'Помилка',
                     'type': 'error',
                     'text': 'Електронна пошта обов\'язкова',
-                    'remainingTime': SHOW_MESSAGE_IN_SECONDS,
-                    'pin': false
-                };
-                this.errors.push(newMessage);
+                });
             }
         },
         validatePasswordField() {
             if (!this.password) {
-                let newMessage = {
+                this.$store.commit('addMessages', {
+                    'title': 'Помилка',
                     'type': 'error',
                     'text': 'Пароль обов\'язковий',
-                    'remainingTime': SHOW_MESSAGE_IN_SECONDS,
-                    'pin': false
-                };
-                this.errors.push(newMessage);
+                });
             }
         }
     }
@@ -111,7 +103,7 @@ export default {
         box-sizing: border-box;
         font-family: 'Poppins', sans-serif;
     }
-    .container {
+    .container-central {
         height: 100vh;
         width: 100%;
         display: flex;
@@ -121,6 +113,7 @@ export default {
         column-gap: 30px;
     }
     .form {
+        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
         position: absolute;
         max-width: 430px;
         width: 100%;
@@ -211,7 +204,7 @@ export default {
             padding: 20px 10px;
         }
     }
-    .errors {
+    .messages {
         display: flex;
         justify-content: end;
     }

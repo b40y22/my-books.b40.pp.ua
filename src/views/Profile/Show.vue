@@ -1,10 +1,13 @@
 <template>
     <Menu></Menu>
-    <div class="profile-form">
+    <div class="messages">
+        <Notification></Notification>
+    </div>
+    <div class="container-center">
         <h5>Профіль користувача</h5>
 
         <div class="mt-3 image-container" @click="openFileInput">
-            <img :src="getProfileImage" alt="Photo" width="200" height="200" class="rounded-circle image-container-img" @mouseenter="showEditIcon" @mouseleave="hideEditIcon">
+            <img :src="getProfileImage" alt="Photo" width="128" height="128" class="rounded-circle image-container-img" @mouseenter="showEditIcon" @mouseleave="hideEditIcon">
             <div class="fa fa-pencil edit-icon" @click.stop="openFileInput" v-if="showIcon"></div>
             <input type="file" ref="fileInput" accept="image/*" @change="handleFileChange" style="display: none;" />
         </div>
@@ -28,10 +31,12 @@
 /* eslint-disable vue/multi-word-component-names */
 import Menu from "@/components/Menu.vue";
 import api from "@/api";
+import Notification from "@/components/Notifications.vue";
 
 export default {
     name: "Show",
     components: {
+        Notification,
         Menu
     },
     computed: {
@@ -39,7 +44,7 @@ export default {
             if (this.$store.getters.getUser.image) {
                 return process.env.VUE_APP_BACKEND_URL + 'images/users/' + this.$store.getters.getUser.image;
             }
-            return '';
+            return '/images/no_user.png?v=0.0.1';
         },
         getProfileName() {
             if (this.$store.getters.getUser.name) {
@@ -50,7 +55,7 @@ export default {
     },
     created() {
         api.getCurrentUser().then((response) => {
-            this.$store.dispatch('setUser', response.data.data.user);
+            this.$store.commit('setUser', response.data.data.user);
         })
     },
     data() {
@@ -106,7 +111,12 @@ export default {
 
             api.updateCurrentUser(data, config).then(response => {
                 if (200 === response.status) {
-                    this.$store.dispatch('setUser', response.data.data.user)
+                    this.$store.commit('setUser', response.data.data.user)
+                    this.$store.commit('addMessages', {
+                        'title': 'Успіх',
+                        'type': 'success',
+                        'text': 'Збережено успешно',
+                    });
                 }
             });
         }
@@ -115,18 +125,20 @@ export default {
 </script>
 
 <style scoped>
-    .profile-form {
+    .container-center {
         display: flex;
         flex-direction: column;
-        margin: 120px auto 0 auto;
+        margin: 100px auto 0 auto;
         width: 600px;
     }
+
     .image-container {
         position: relative;
         display: flex;
         justify-content: center;
         cursor: pointer;
     }
+
     .image-container-img:hover {
         opacity: 0.5;
     }
@@ -146,5 +158,10 @@ export default {
 
     .image-container:hover .edit-icon {
         opacity: 1;
+    }
+
+    .messages {
+        display: flex;
+        justify-content: end;
     }
 </style>

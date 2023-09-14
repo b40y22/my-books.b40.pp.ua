@@ -3,30 +3,45 @@ import { createStore } from 'vuex';
 const store = createStore({
     state: {
         user: [],
-        books: []
+        book: [],
+        books: [],
+        messages: []
     },
     mutations: {
-        setUserMutation(state, user) {
+        setUser(state, user) {
             state.user = user;
         },
-        setBookMutation(state, books) {
-            state.books = books;
-        },
-    },
-    actions: {
-        setUser(state, user) {
-            state.commit('setUserMutation', user);
+        setBook(state, book) {
+            state.book = book;
         },
         setBooks(state, books) {
-            state.commit('setBookMutation', books);
+            state.books = books;
         },
+        addMessages(state, messages) {
+            state.messages = [...state.messages, messages];
+        },
+        resetAllMessages(state) {
+            state.messages = [];
+        },
+        removeMessage(state, index) {
+            state.messages.splice(index, 1)
+        }
+    },
+    actions: {
+        //
     },
     getters: {
         getUser: state => {
             return state.user;
         },
+        getBook: state => {
+            return state.book;
+        },
         getBooks: state => {
             return state.books;
+        },
+        getMessages: state => {
+            return state.messages;
         },
     }
 });

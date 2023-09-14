@@ -15,7 +15,7 @@
                             Додати
                         </a>
                         <ul class="dropdown-menu" :class="{show: this.checkDropdownInActive('addDropdown')}">
-                            <li><a class="dropdown-item" href="#">Книгу</a></li>
+                            <li><router-link :to="{name: 'Create'}" class="dropdown-item">Книгу</router-link></li>
                             <li><a class="dropdown-item" href="#">Автора</a></li>
                         </ul>
                     </li>
@@ -58,7 +58,7 @@ export default {
     },
     created() {
         api.getCurrentUser().then((response) => {
-            this.$store.dispatch('setUser', response.data.data.user);
+            this.$store.commit('setUser', response.data.data.user);
         })
     },
     computed: {
@@ -66,7 +66,7 @@ export default {
             if (this.$store.getters.getUser.image) {
                 return process.env.VUE_APP_BACKEND_URL + 'images/users/' + this.$store.getters.getUser.image;
             }
-            return '';
+            return '/images/no_user.png?v=0.0.1';
         },
         getProfileName() {
             if (this.$store.getters.getUser.name) {

@@ -18,7 +18,11 @@ export default {
             return this.book.authors[0].firstname + ' ' + this.book.authors[0].lastname
         },
         getImage() {
-            return '/images/books/' + JSON.parse(this.book.files)[0].image;
+            if (this.book.files) {
+                return '/images/books/' + JSON.parse(this.book.files)[0].image;
+            } else {
+                return '/images/no_image.png';
+            }
         }
     },
     props: [
