@@ -1,6 +1,5 @@
-export default function clearNotifications({ to, next }) {
-    console.log('clearNotifications')
-    console.log(to)
-    this.$store.resetAllMessages();
-    return next();
+import store from "@/store";
+
+export default function clearNotifications() {
+    store.commit('resetAllMessages')
 }

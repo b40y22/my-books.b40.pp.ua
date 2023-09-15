@@ -11,9 +11,9 @@
                     <li><router-link :to="{name: 'Root'}" class="nav-link px-2 link-body-emphasis">Автори</router-link></li>
                     <li><router-link :to="{name: 'Root'}" class="nav-link px-2 link-body-emphasis">Черга</router-link></li>
                     <li class="nav-item dropdown" ref="addDropdown" @click="toggleDropdownState('addDropdown')">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <div class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Додати
-                        </a>
+                        </div>
                         <ul class="dropdown-menu" :class="{show: this.checkDropdownInActive('addDropdown')}">
                             <li><router-link :to="{name: 'Create'}" class="dropdown-item">Книгу</router-link></li>
                             <li><a class="dropdown-item" href="#">Автора</a></li>
@@ -25,10 +25,16 @@
                     <input type="search" class="form-control" placeholder="Пошук" v-model="search" title="Назва книжки, або автор" @keyup.enter="runSearch">
                 </div>
 
+                <div style="position: relative">
+                    <span class="fa fa-bell-o messages">
+                        <i class="active"></i>
+                    </span>
+                </div>
+
                 <div class="dropdown nav-item text-end" ref="userDropdown" @click="toggleDropdownState('userDropdown')">
-                    <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle show" data-bs-toggle="dropdown" aria-expanded="true">
+                    <div class="d-block link-body-emphasis text-decoration-none dropdown-toggle show" data-bs-toggle="dropdown" aria-expanded="true">
                         <img :src="getProfileImage" alt="Photo" width="42" height="42" class="rounded-circle" :title="getProfileName">
-                    </a>
+                    </div>
                     <ul class="dropdown-menu text-small" :class="{show: this.checkDropdownInActive('userDropdown')}">
                         <li><a class="dropdown-item" href="#">Налаштування</a></li>
                         <li><router-link :to="{name: 'Show'}" class="dropdown-item">Профіль</router-link></li>
@@ -133,5 +139,25 @@ export default {
     }
     .dropdown-item:active {
         background-color: #bbbdbb;
+    }
+    .nav-link {
+        color: #000000;
+    }
+    .messages {
+        color: #808181;
+        cursor: pointer;
+        font-size: 20px;
+        margin: 0 30px 0 20px;
+    }
+    .messages:hover {
+        color: #000000;
+    }
+    .active {
+        position: absolute;
+        background-color: red;
+        border-radius: 4px;
+        width: 8px;
+        height: 8px;
+        left: 50%;
     }
 </style>

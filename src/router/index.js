@@ -15,21 +15,21 @@ import Create from "@/views/Books/Create.vue";
 
 const routes = [
     // Auth
-    {path: '/registration', name: 'Registration', component: Registration, meta: {middleware: [log, clearNotifications]}},
-    {path: '/login', name: 'Login', component: Login, meta: {middleware: [log, clearNotifications]}},
+    {path: '/registration', name: 'Registration', component: Registration, meta: {middleware: [log]}},
+    {path: '/login', name: 'Login', component: Login, meta: {middleware: [log]}},
 
     // General
-    {path: '/home', name: 'Home', component: Home, meta: {middleware: [auth, log, clearNotifications]}},
+    {path: '/home', name: 'Home', component: Home, meta: {middleware: [auth, log]}},
 
     // Import
-    {path: '/import/loveread', name: 'Loveread', component: Loveread, meta: {middleware: [auth, log, clearNotifications]}},
+    {path: '/import/loveread', name: 'Loveread', component: Loveread, meta: {middleware: [auth, log]}},
 
     // Books
-    {path: '/', name: 'Root', component: BookList, meta: {middleware: [auth, log, clearNotifications]}},
-    {path: '/book/create', name: 'Create', component: Create, meta: {middleware: [auth, log, clearNotifications]}},
+    {path: '/', name: 'Root', component: BookList, meta: {middleware: [auth, log]}},
+    {path: '/book/create', name: 'Create', component: Create, meta: {middleware: [auth, log]}},
 
     //User
-    {path: '/profile', name: 'Show', component: Show, meta: {middleware: [auth, log, clearNotifications]}},
+    {path: '/profile', name: 'Show', component: Show, meta: {middleware: [auth, log]}},
 
     // 404
     {path: '/:catchAll(.*)', component: Error404}
@@ -51,11 +51,19 @@ router.beforeEach((to, from, next) => {
         from,
         next
     }
-    // !!!!
-    console.log(middleware[0])
-    return middleware[0]({
+
+    // Очищення від нотіфікацій
+    clearNotifications({
         ...context
+    });
+
+    middleware.forEach((item) => {
+        item({
+            ...context
+        })
     })
+
+    return next();
 })
 
 export default router;

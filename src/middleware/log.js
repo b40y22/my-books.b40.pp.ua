@@ -1,5 +1,3 @@
-export default function log({ next, to }) {
+export default function log({ to }) {
     console.log(to.name);
-
-    return next();
 }
