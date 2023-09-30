@@ -51,6 +51,8 @@ export default {
     },
     methods: {
         loginSend() {
+            this.$store.commit('resetAllMessages');
+
             this.validateEmailField();
             this.validatePasswordField();
 

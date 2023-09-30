@@ -14,12 +14,12 @@
 
         <div class="form-group my-3">
             <label for="profile-name">Ім'я</label>
-            <input type="text" class="form-control" id="profile-name" v-model="this.$store.getters.getUser.name" @change="changeName">
+            <input type="text" class="form-control" id="profile-name" v-model="this.$store.getters.getUser.name">
         </div>
 
         <div class="form-group my-3">
             <label for="profile-email">Електронна пошта</label>
-            <input type="email" class="form-control" id="profile-email" v-model="this.$store.getters.getUser.email" @change="changeEmail">
+            <input type="email" class="form-control" id="profile-email" v-model="this.$store.getters.getUser.email">
         </div>
 
         <button type="button" class="btn btn-primary mt-3" @click="handle">Зберегти</button>
@@ -61,20 +61,9 @@ export default {
     data() {
         return {
             showIcon: false,
-            User: {
-                name: null,
-                email: null,
-                image: null
-            }
         };
     },
     methods: {
-        changeName() {
-            this.User.name = this.$store.getters.getUser.name
-        },
-        changeEmail() {
-            this.User.email = this.$store.getters.getUser.email
-        },
         openFileInput() {
             this.$refs.fileInput.click();
         },
@@ -85,37 +74,45 @@ export default {
             this.showIcon = false;
         },
         handleFileChange(event) {
-            this.User.image = event.target.files[0];
+            let data = new FormData();
+            data.append('photo', event.target.files[0]);
+
+            api.updateUserPhoto(data).then(response => {
+                if (200 === response.status) {
+                    this.$store.commit('setUserPhoto', response.data.data.photo.filename)
+                    this.$store.commit('addMessages', {
+                        'title': 'Успіх',
+                        'type': 'success',
+                        'text': 'Оновлено успешно',
+                    });
+                } else {
+                    this.$store.commit('addMessages', {
+                        'title': 'Помилка',
+                        'type': 'error',
+                        'text': 'Зображення не оновлено',
+                    });
+                }
+            });
+
         },
         handle() {
-            const config = {
-                headers: {
-                    'content-type': 'multipart/form-data'
-                }
-            }
-
-            let data = new FormData();
-            data.append('id', this.$store.getters.getUser.id);
-
-            if (this.User.name) {
-                data.append('name', this.User.name);
-            }
-
-            if (this.User.email) {
-                data.append('email', this.User.email);
-            }
-
-            if (this.User.image) {
-                data.append('image', this.User.image);
-            }
-
-            api.updateCurrentUser(data, config).then(response => {
+            api.updateCurrentUser({
+                "id": this.$store.getters.getUser.id,
+                "name": this.$store.getters.getUser.name,
+                "email": this.$store.getters.getUser.email,
+            }).then(response => {
                 if (200 === response.status) {
                     this.$store.commit('setUser', response.data.data.user)
                     this.$store.commit('addMessages', {
                         'title': 'Успіх',
                         'type': 'success',
-                        'text': 'Збережено успешно',
+                        'text': 'Оновлено успешно',
+                    });
+                } else {
+                    this.$store.commit('addMessages', {
+                        'title': 'Помилка',
+                        'type': 'error',
+                        'text': 'Не оновлено',
                     });
                 }
             });

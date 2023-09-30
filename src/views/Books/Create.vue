@@ -3,7 +3,7 @@
     <div class="messages">
         <Notification></Notification>
     </div>
-    <Breadcrumbs></Breadcrumbs>
+<!--    <Breadcrumbs></Breadcrumbs>-->
     <div class="container-center">
         <h5>Додати книгу</h5>
 
@@ -44,7 +44,7 @@
 <script>
 /* eslint-disable vue/multi-word-component-names */
 import Menu from "@/components/Menu.vue";
-import Breadcrumbs from "@/components/Breadcrumbs.vue";
+// import Breadcrumbs from "@/components/Breadcrumbs.vue";
 import Notification from "@/components/Notifications.vue";
 
 export default {
@@ -58,7 +58,7 @@ export default {
     },
     components: {
         Notification,
-        Breadcrumbs,
+        // Breadcrumbs,
         Menu
     },
     methods: {

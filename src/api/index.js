@@ -41,6 +41,10 @@ export default {
         return axios.get('/user').catch(handleApiError);
     },
     updateCurrentUser(params) {
-        return axios.post('/user', params).catch(handleApiError);
+        return axios.put('/user/' + params.id, params).catch(handleApiError);
+    },
+    updateUserPhoto(params) {
+        return axios.post('/user/photo', params).catch(handleApiError);
     }
+
 };

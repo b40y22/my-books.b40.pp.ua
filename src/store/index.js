@@ -11,6 +11,9 @@ const store = createStore({
         setUser(state, user) {
             state.user = user;
         },
+        setUserPhoto(state, image) {
+            state.user.image = image;
+        },
         setBook(state, book) {
             state.book = book;
         },
